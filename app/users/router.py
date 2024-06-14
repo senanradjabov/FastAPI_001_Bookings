@@ -21,11 +21,9 @@ async def register_user(response: Response, user_data: SUserAuth):
 
     hashed_password = get_password_hash(user_data.password)
 
-    await UsersDAO().add(email=user_data.email, hashed_password=hashed_password)
+    user_id = await UsersDAO().add(email=user_data.email, hashed_password=hashed_password)
 
-    user = await UsersDAO().get_one_or_none(email=user_data.email)
-
-    access_token = create_access_token({"sub": str(user.id)})
+    access_token = create_access_token({"sub": str(user_id)})
     response.set_cookie("booking_access_token", access_token, httponly=True)
 
     return {"message": "Successfully register"}
