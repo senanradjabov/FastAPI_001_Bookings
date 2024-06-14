@@ -43,14 +43,13 @@ async def get_current_user(token: str = Depends(get_token)):
     user = await UsersDAO().get_one_or_none(id=int(user_id))
 
     if user is None:
-        print("user gg")
         raise credentials_exception
 
     return user
 
 
 async def get_current_admin_user(current_user: Users = Depends(get_current_user)):
-    if current_user.email != "3":
+    if current_user.id != 3:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
 
     return current_user
